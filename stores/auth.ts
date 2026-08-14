@@ -37,7 +37,11 @@ export const useAuthStore = create<AuthState>()(
       login: async (email, password) => {
         const res = await api.post("/api/auth/login", { email, password });
         const { access_token, refresh_token } = res.data;
+        // Simpan ke Zustand state
         set({ accessToken: access_token, refreshToken: refresh_token });
+        // Simpan ke localStorage agar axios interceptor bisa baca
+        localStorage.setItem("accessToken", access_token);
+        localStorage.setItem("refreshToken", refresh_token);
         await get().fetchProfile();
       },
 
